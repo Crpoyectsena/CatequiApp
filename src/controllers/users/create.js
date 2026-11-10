@@ -5,21 +5,28 @@ import Boom from '@hapi/boom';
 
 export const createOneUser = async (req, res, next) => {
 
-  // Extract username and password from the request body
+  const { newUserData } = req.body || {};
+  if (!newUserData || typeof newUserData !== 'object' || Array.isArray(newUserData)) {
+    return next(Boom.badRequest('New user data is required'));
+  }
+
   const newUser = {
-    id: req.body.newUserData.id,
-    userName: req.body.newUserData.userName,
-    password: req.body.newUserData.password,
-    role: req.body.newUserData.role,
-    email: req.body.newUserData.email,
-    phone: req.body.newUserData.phone,
-    address: req.body.newUserData.address,
-    registrationNumber: req.body.newUserData.registrationNumber,
-    program: req.body.newUserData.program,
-    firstName: req.body.newUserData.firstName,
-    middleName: req.body.newUserData.middleName,
-    firstLastName: req.body.newUserData.firstLastName,
-    secondLastName: req.body.newUserData.secondLastName,
+    id: newUserData.id,
+    tipoDocumento: newUserData.tipoDocumento,
+    fechaNacimiento: newUserData.fechaNacimiento,
+    idAcudiente: newUserData.idAcudiente,
+    userName: newUserData.userName,
+    password: newUserData.password,
+    role: newUserData.role,
+    email: newUserData.email,
+    phone: newUserData.phone,
+    address: newUserData.address,
+    registrationNumber: newUserData.registrationNumber,
+    program: newUserData.program,
+    firstName: newUserData.firstName,
+    middleName: newUserData.middleName,
+    firstLastName: newUserData.firstLastName,
+    secondLastName: newUserData.secondLastName,
   };
 
   // Instantiate the UserServices class to manage the users operations

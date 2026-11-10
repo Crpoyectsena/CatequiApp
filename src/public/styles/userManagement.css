@@ -1,0 +1,418 @@
+body.with-sidebar {
+  min-height: 100vh;
+  padding-left: 27rem;
+}
+
+.accounts-content {
+  width: min(100%, 144rem);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 4.8rem;
+  animation: fadeIn 400ms ease both;
+}
+
+.accounts-topbar {
+  display: flex;
+  min-height: 8.6rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  border-bottom: 0.1rem solid var(--line);
+}
+
+.accounts-breadcrumb {
+  color: var(--ink);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.accounts-breadcrumb span {
+  margin: 0 0.7rem;
+  color: #a4afaa;
+}
+
+.accounts-caption {
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+
+.administrator-badge,
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 99rem;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: 1.15rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.accounts-hero {
+  margin-top: 3rem;
+  padding: 3rem;
+  border-radius: 2rem;
+  background: linear-gradient(120deg, #176b5b, #104c43);
+  color: #fff;
+}
+
+.accounts-kicker {
+  margin-bottom: 0.5rem;
+  color: var(--brand);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.1rem;
+}
+
+.accounts-hero .accounts-kicker {
+  color: #f3d795;
+}
+
+.accounts-hero h1 {
+  font-size: clamp(2.8rem, 4vw, 3.6rem);
+  letter-spacing: -0.08rem;
+}
+
+.accounts-hero > p:last-child {
+  max-width: 62rem;
+  margin-top: 0.7rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.45rem;
+}
+
+.accounts-panel {
+  margin-top: 2rem;
+  padding: 2.6rem;
+  border: 0.1rem solid var(--line);
+  border-radius: 2rem;
+  background: var(--surface);
+  box-shadow: 0 0.8rem 2.4rem rgba(30, 66, 57, 0.05);
+}
+
+.accounts-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.accounts-panel-heading h2 {
+  color: var(--ink);
+  font-size: 2rem;
+}
+
+.accounts-primary-button,
+.accounts-secondary-button {
+  min-height: 4.4rem;
+  padding: 0.9rem 1.5rem;
+  border: 0;
+  border-radius: 1.1rem;
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: 750;
+}
+
+.accounts-primary-button {
+  color: #fff;
+  background: var(--brand);
+}
+
+.accounts-primary-button:hover {
+  background: var(--brand-dark);
+}
+
+.accounts-primary-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.accounts-secondary-button {
+  border: 0.1rem solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.accounts-feedback,
+.account-form-feedback {
+  margin: 0 0 1rem;
+  color: var(--danger);
+  font-size: 1.3rem;
+}
+
+.accounts-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 0.1rem solid var(--line);
+  border-radius: 1.3rem;
+}
+
+.accounts-table {
+  width: 100%;
+  min-width: 88rem;
+  border-collapse: collapse;
+  font-size: 1.25rem;
+}
+
+.accounts-table th,
+.accounts-table td {
+  padding: 1.2rem;
+  border-bottom: 0.1rem solid var(--line);
+  text-align: left;
+}
+
+.accounts-table th {
+  background: #edf5f1;
+  color: var(--brand-dark);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.accounts-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.accounts-empty {
+  padding: 2rem;
+  color: var(--muted);
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.account-actions {
+  white-space: nowrap;
+}
+
+.account-action {
+  min-height: 3.4rem;
+  padding: 0.6rem 1rem;
+  border: 0.1rem solid var(--line);
+  border-radius: 0.8rem;
+  background: var(--surface);
+  color: var(--brand-dark);
+  cursor: pointer;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.account-action + .account-action {
+  margin-left: 0.7rem;
+}
+
+.account-action:hover {
+  background: #edf5f1;
+}
+
+.account-action-danger {
+  color: var(--danger);
+}
+
+.account-action-danger:hover {
+  background: #fff1ef;
+}
+
+.account-action:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.accounts-guidance {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 1.25rem;
+}
+
+.accounts-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1.8rem 0 2.4rem;
+  border-top: 0.1rem solid var(--line);
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+
+.account-modal[hidden] {
+  display: none;
+}
+
+.account-modal {
+  position: fixed;
+  z-index: 20;
+  display: grid;
+  padding: 2rem;
+  place-items: center;
+  background: rgba(16, 43, 38, 0.58);
+  backdrop-filter: blur(0.5rem);
+  inset: 0;
+}
+
+.account-modal-card {
+  width: min(100%, 56rem);
+  max-height: 90vh;
+  padding: 2.8rem;
+  overflow-y: auto;
+  border: 0.1rem solid var(--line);
+  border-radius: 2rem;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.account-modal-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-modal-heading h2 {
+  color: var(--ink);
+  font-size: 2.2rem;
+}
+
+.account-close {
+  width: 3.8rem;
+  height: 3.8rem;
+  border: 0;
+  border-radius: 1rem;
+  background: #f0f4f1;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 2.5rem;
+}
+
+.account-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1.2rem;
+}
+
+.catechumen-account-fields[hidden] {
+  display: none;
+}
+
+.catechumen-account-fields {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1.2rem;
+  padding-top: 0.8rem;
+}
+
+.catechumen-account-note {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+
+.account-form label {
+  align-self: end;
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.account-form input,
+.account-form select {
+  width: 100%;
+  min-height: 4.3rem;
+  padding: 0 1.1rem;
+  border: 0.1rem solid var(--line);
+  border-radius: 1rem;
+  background: #fbfcfb;
+  color: var(--ink);
+  font-size: 1.3rem;
+}
+
+.account-form input:focus,
+.account-form select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 0.3rem rgba(23, 107, 91, 0.1);
+  outline: 0;
+}
+
+.account-password-note {
+  grid-column: 1 / -1;
+  margin-top: -0.5rem;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+.account-form-feedback,
+.account-form-actions {
+  grid-column: 1 / -1;
+}
+
+.account-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+@media (max-width: 1100px) {
+  .accounts-content {
+    padding: 0 3rem;
+  }
+}
+
+@media (max-width: 700px) {
+  body.with-sidebar {
+    padding-left: 0;
+  }
+
+  .accounts-content {
+    width: 100%;
+    min-height: auto;
+    padding: 0 1.8rem;
+  }
+
+  .accounts-topbar {
+    min-height: 7rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .accounts-content {
+    padding: 0 1.2rem;
+  }
+
+  .accounts-caption {
+    display: none;
+  }
+
+  .accounts-hero,
+  .accounts-panel,
+  .account-modal-card {
+    padding: 2rem;
+  }
+
+  .accounts-panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+
+  .catechumen-account-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .account-form-feedback,
+  .account-form-actions {
+    grid-column: 1;
+  }
+
+  .account-form-actions,
+  .accounts-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

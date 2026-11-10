@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de usuario</title>
+  <title>Registro deshabilitado | CatequiApp</title>
+  <link rel="stylesheet" href="/styles/app.css">
   <link rel="stylesheet" href="/styles/registerForm.css">
-  <script defer type="application/javascript" src="/js/registerForm.js"></script>
   <script type="application/javascript" src="/js/redirectView.js"></script>
 </head>
 
@@ -14,52 +14,18 @@
   <main class="auth-container">
 
     <section class="auth-card auth-info">
-      <h1>Sistema académico</h1>
-      <h2>Crear cuenta</h2>
-      <img class="auth-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="Logo">
+      <span class="brand-mark auth-logo" aria-hidden="true">C</span>
+      <h1>CatequiApp</h1>
+      <h2>Tu camino de fe, en comunidad.</h2>
+      <p>Las cuentas de CatequiApp son administradas por el equipo de catequesis.</p>
     </section>
 
     <section class="auth-card auth-form scroll">
-      <h2>Registro</h2>
-
-      <form class="form" onsubmit="return handleRegister(event)">
-        <input type="number" placeholder="Documento" id="id" required>
-        <input type="text" placeholder="Usuario" id="userName" required>
-        <input type="password" placeholder="Contraseña" id="password" required>
-
-        <select id="role" required>
-          <option value="">Rol</option>
-          <option value="estudiante">Estudiante</option>
-          <option value="coordinador">Coordinador</option>
-          <option value="docente">Docente</option>
-        </select>
-
-        <input type="email" placeholder="Correo" id="email" required>
-        <input type="tel" placeholder="Teléfono" id="phone" required>
-        <input type="text" placeholder="Dirección" id="address" required>
-        <input type="text" placeholder="Matrícula" id="registrationNumber" required>
-
-        <select id="program" required>
-          <option value="">Programa</option>
-          <option>Ingeniería de Sistemas</option>
-          <option>Ingeniería Electrónica</option>
-          <option>Ingeniería Industrial</option>
-          <option>Ingeniería Civil</option>
-          <option>Ingeniería Mecánica</option>
-        </select>
-
-        <input type="text" placeholder="Primer nombre" id="firstName" required>
-        <input type="text" placeholder="Segundo nombre" id="middleName">
-        <input type="text" placeholder="Primer apellido" id="firstLastName" required>
-        <input type="text" placeholder="Segundo apellido" id="secondLastName" required>
-
-        <p class="form-error" id="wrong-input"></p>
-
-        <button type="submit">Registrar</button>
-      </form>
-
+      <p class="form-eyebrow">Acceso administrado</p>
+      <h2>El registro público está deshabilitado</h2>
+      <p>Solicita al administrador la creación de tu cuenta y el perfil correspondiente: administrador, catequista o acudiente.</p>
       <div class="auth-links">
-        <p data-path="/app/v1/" onclick="redirect(this)">Volver al login</p>
+        <p data-path="/app/v1/" onclick="redirect(this)">Volver al inicio de sesión</p>
       </div>
     </section>
 

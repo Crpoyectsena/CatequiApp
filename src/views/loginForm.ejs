@@ -4,46 +4,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Inicio de sección">
-  <title>Inicio de sección</title>
+  <meta name="description" content="Inicia sesión en CatequiApp">
+  <title>Iniciar sesión | CatequiApp</title>
   <meta name="robots" content="index,follow">
+  <link rel="stylesheet" href="/styles/app.css" type="text/css">
   <link rel="stylesheet" href="/styles/loginForm.css" type="text/css">
-  <script type="application/javascript" src="/js/validateFormLoginFields.js"></script>
-  <script type="application/javascript" src="/js/login.js"></script>
-  <script type="application/javascript" src="/js/redirectView.js"></script>
+  <script defer src="/js/validateFormLoginFields.js"></script>
+  <script defer src="/js/login.js"></script>
 </head>
 
 <body>
   <main class="container">
     <section class="card project-info">
-      <h1 class="project-name">Sistema académico</h1>
-      <h2 class="welcome-title">Bienvenido</h2>
-      <picture class="logo-box">
-        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"
-          alt="JavaScript Logo" />
-      </picture>
+      <span class="brand-mark" aria-hidden="true">C</span>
+      <h1 class="project-name">CatequiApp</h1>
+      <h2 class="welcome-title">Una comunidad que crece en la fe</h2>
+      <p class="project-description">Acompañamos cada paso de tu camino de formación.</p>
     </section>
     <section class="card login-form">
-      <h2 class="login-title">Inicio de sección</h2>
-      <form class="form-box" id="loginForm" onsubmit="return handleSubmit(event)">
+      <p class="form-eyebrow">Qué bueno tenerte de vuelta</p>
+      <h2 class="login-title">Inicia sesión</h2>
+      <form class="form-box" id="loginForm">
         <label class="form-lb" for="username">Usuario</label>
         <input class="form-input" type="text" id="username" name="username" required />
 
         <label class="form-lb" for="password">Contraseña</label>
         <input class="form-input" type="password" id="password" name="password" required />
 
-        <p class="wrong-input" id="wrong-input"></p>
-        <button class="form-button" type="submit">Enviar</button>
+        <p class="wrong-input" id="wrong-input" role="alert" aria-live="polite"></p>
+        <button class="form-button" id="login-button" type="submit">Entrar a mi cuenta</button>
       </form>
       <div class="linksBox">
         <p class="support">Contactar a soporte</p>
-        <p class="register" data-path="/app/v1/register" onclick="redirect(this)">
-          Registrarse
-        </p>
-        <p class="forgot">Olvidé contraseña</p>
+        <p class="register-info">Las cuentas de CatequiApp son creadas por el administrador.</p>
+        <button class="forgot" id="forgot-password" type="button">Olvidé mi contraseña</button>
       </div>
     </section>
   </main>
+  <div class="recovery-modal" id="recovery-modal" hidden>
+    <section class="recovery-dialog" role="dialog" aria-modal="true" aria-labelledby="recovery-title">
+      <button class="recovery-close" id="close-recovery" type="button" aria-label="Cerrar">×</button>
+      <p class="form-eyebrow">Recuperación de acceso</p>
+      <h2 id="recovery-title">Solicita ayuda al administrador</h2>
+      <p>Por seguridad, la contraseña no se puede restablecer desde esta pantalla. Comunícate directamente con el administrador de CatequiApp para verificar tu identidad y solicitar el cambio.</p>
+      <button class="form-button recovery-confirm" id="confirm-recovery" type="button">Entendido</button>
+    </section>
+  </div>
 </body>
 
 </html>

@@ -12,7 +12,11 @@ export const profile = async (req, res, next) => {
     // Find the user record by ID
     const userData = await userManager.listOne(id);
     // Return rendering the template and send the user data object
-    res.render('profile', { userData: userData });
+    res.render('profile', {
+      userData: userData,
+      activeModule: 'profile',
+      userRole: userData.role,
+    });
   } catch (err) {
     const boomError = Boom.notImplemented(
       'No es posible renderizar la vista de perfil de usuario.',

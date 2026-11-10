@@ -4,76 +4,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Perfil de usuario - Panel de control">
-  <title>Perfil de Usuario</title>
+  <meta name="description" content="Tu perfil de usuario en CatequiApp">
+  <title>Mi perfil | CatequiApp</title>
+  <link rel="stylesheet" href="/styles/app.css">
   <link rel="stylesheet" href="/styles/profile.css" type="text/css">
-  <script type="application/javascript" src="/js/redirectView.js"></script>
+  <link rel="stylesheet" href="/styles/navigation.css">
+  <script defer src="/js/profile.js"></script>
 </head>
 
-<body>
+<body class="with-sidebar">
+  <%- include('partials/sidebar', { activeModule: 'profile', userRole }) %>
   <main class="profile-container">
-    <nav class="top-nav">
-      <button class="back-button" data-path="/app/v1/dashboard" onclick="redirect(this)">
-        ← Volver al Dashboard
-      </button>
-    </nav>
-
     <section class="card profile-header">
-      <div class="avatar-box">
-        <img class="avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto de perfil">
+      <div class="profile-project-logo" aria-label="Logo de CatequiApp">
+        <span class="brand-mark auth-logo" aria-hidden="true">C</span>
       </div>
-      <h1 class="profile-title"><%= userData.firstName %> <%= userData.middleName %> <%= userData.firstLastName %> <%= userData.secondLastName %></h1>
+      <h1 class="profile-title"><%= [userData.firstName, userData.middleName, userData.firstLastName, userData.secondLastName].filter(Boolean).join(' ') %></h1>
       <p class="profile-role"><%= userData.role %></p>
-      <p class="profile-subtitle">Gestiona tu información personal y configuraciones.</p>
+      <p class="profile-subtitle">Consulta y actualiza tu información personal.</p>
     </section>
 
     <section class="card profile-details">
-      <h2 class="section-title">Información Personal</h2>
+      <div class="profile-section-heading">
+        <h2 class="section-title">Información personal</h2>
+        <button class="profile-edit-button" type="button" id="edit-profile">Editar</button>
+      </div>
       <div class="details-grid">
         <div class="detail-item">
+          <span class="detail-label">Usuario:</span>
+          <span class="detail-value"><%= userData.userName || '—' %></span>
+        </div>
+        <div class="detail-item">
           <span class="detail-label">Correo:</span>
-          <span class="detail-value"><%= userData.email %></span>
+          <span class="detail-value"><%= userData.email || '—' %></span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Teléfono:</span>
-          <span class="detail-value"><%= userData.phone %></span>
+          <span class="detail-value"><%= userData.phone || '—' %></span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Dirección:</span>
-          <span class="detail-value"><%= userData.address %></span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Matrícula:</span>
-          <span class="detail-value"><%= userData.registrationNumber %></span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Programa:</span>
-          <span class="detail-value"><%= userData.program %></span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Fecha de ingreso:</span>
-          <span class="detail-value"><%= userData.createdAt %></span>
+          <span class="detail-value"><%= userData.address || '—' %></span>
         </div>
       </div>
-    </section>
 
-    <section class="card profile-actions">
-      <h2 class="section-title">Acciones Rápidas</h2>
-      <div class="actions-grid">
-        <button class="action-button primary">
-          ✏️ Editar Perfil
-        </button>
-        <button class="action-button warning">
-          🔒 Cambiar Contraseña
-        </button>
-        <button class="action-button danger" data-path="/app/v1/" onclick="redirect(this)">
-          🚪 Cerrar Sesión
-        </button>
-      </div>
+      <form class="profile-edit-form" id="profile-form" hidden>
+        <div class="details-grid">
+          <label class="profile-field" for="first-name">Primer nombre
+            <input id="first-name" name="firstName" type="text" maxlength="50" value="<%= userData.firstName || '' %>" required>
+          </label>
+          <label class="profile-field" for="middle-name">Segundo nombre
+            <input id="middle-name" name="middleName" type="text" maxlength="50" value="<%= userData.middleName || '' %>">
+          </label>
+          <label class="profile-field" for="first-last-name">Primer apellido
+            <input id="first-last-name" name="firstLastName" type="text" maxlength="50" value="<%= userData.firstLastName || '' %>" required>
+          </label>
+          <label class="profile-field" for="second-last-name">Segundo apellido
+            <input id="second-last-name" name="secondLastName" type="text" maxlength="50" value="<%= userData.secondLastName || '' %>">
+          </label>
+          <label class="profile-field" for="profile-email">Correo electrónico
+            <input id="profile-email" name="email" type="email" maxlength="100" value="<%= userData.email || '' %>" required>
+          </label>
+          <label class="profile-field" for="profile-phone">Teléfono
+            <input id="profile-phone" name="phone" type="tel" maxlength="20" value="<%= userData.phone || '' %>">
+          </label>
+          <label class="profile-field profile-field-wide" for="profile-address">Dirección
+            <input id="profile-address" name="address" type="text" maxlength="255" value="<%= userData.address || '' %>">
+          </label>
+        </div>
+        <p class="profile-feedback" id="profile-feedback" role="status" aria-live="polite"></p>
+        <div class="profile-form-actions">
+          <button class="profile-quiet-button" type="button" id="cancel-profile">Cancelar</button>
+          <button class="profile-edit-button" type="submit" id="save-profile">Guardar</button>
+        </div>
+      </form>
     </section>
 
     <footer class="profile-footer">
-      <p>© 2025 Sistema de Gestión Académica. Todos los derechos reservados.</p>
+      <p>© <%= new Date().getFullYear() %> CatequiApp</p>
     </footer>
   </main>
 </body>

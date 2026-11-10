@@ -1,0 +1,143 @@
+CREATE DATABASE IF NOT EXISTS catequi_db
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_unicode_ci;
+
+USE catequi_db;
+
+CREATE TABLE IF NOT EXISTS Users (
+  id INT PRIMARY KEY,
+  userName VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(50) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(20),
+  address VARCHAR(255),
+  registrationNumber VARCHAR(50) UNIQUE,
+  program VARCHAR(100),
+  firstName VARCHAR(50) NOT NULL,
+  middleName VARCHAR(50),
+  firstLastName VARCHAR(50) NOT NULL,
+  secondLastName VARCHAR(50),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT chkUsersRole
+    CHECK (role IN ('administrador', 'catequista', 'acudiente', 'catequizando'))
+);
+
+CREATE TABLE IF NOT EXISTS Acudientes (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  tipoDocumento VARCHAR(20) NOT NULL,
+  numeroDocumento VARCHAR(20) NOT NULL UNIQUE,
+  nombres VARCHAR(100) NOT NULL,
+  apellidos VARCHAR(100) NOT NULL,
+  fechaNacimiento DATE,
+  direccion VARCHAR(200),
+  telefono VARCHAR(20),
+  correo VARCHAR(100),
+  estado VARCHAR(20) NOT NULL DEFAULT 'activo',
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Catequistas (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  tipoDocumento VARCHAR(20) NOT NULL,
+  numeroDocumento VARCHAR(20) NOT NULL UNIQUE,
+  nombres VARCHAR(100) NOT NULL,
+  apellidos VARCHAR(100) NOT NULL,
+  telefono VARCHAR(20),
+  correo VARCHAR(100),
+  direccion VARCHAR(200),
+  estado VARCHAR(20) NOT NULL DEFAULT 'activo',
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Catequizandos (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  tipoDocumento VARCHAR(20) NOT NULL,
+  numeroDocumento VARCHAR(20) NOT NULL UNIQUE,
+  nombres VARCHAR(100) NOT NULL,
+  apellidos VARCHAR(100) NOT NULL,
+  fechaNacimiento DATE,
+  direccion VARCHAR(200),
+  telefono VARCHAR(20),
+  correo VARCHAR(100),
+  estado VARCHAR(20) NOT NULL DEFAULT 'activo',
+  idAcudiente INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fkCatequizandoAcudiente
+    FOREIGN KEY (idAcudiente) REFERENCES Acudientes(id)
+    ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS Grupos (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nombreGrupo VARCHAR(100) NOT NULL,
+  nivelCatequesis VARCHAR(100) NOT NULL,
+  anio YEAR NOT NULL,
+  horario VARCHAR(100),
+  salon VARCHAR(50),
+  cupoMaximo INT NOT NULL,
+  estado VARCHAR(20) NOT NULL DEFAULT 'activo',
+  idCatequista INT,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fkGrupoCatequista
+    FOREIGN KEY (idCatequista) REFERENCES Catequistas(id)
+    ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS Matriculas (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  fechaMatricula DATE NOT NULL,
+  estado VARCHAR(20) NOT NULL DEFAULT 'activa',
+  observaciones VARCHAR(500),
+  idCatequizando INT NOT NULL,
+  idGrupo INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fkMatriculaCatequizando
+    FOREIGN KEY (idCatequizando) REFERENCES Catequizandos(id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fkMatriculaGrupo
+    FOREIGN KEY (idGrupo) REFERENCES Grupos(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Actividades (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  descripcion TEXT NOT NULL,
+  fechaActividad DATE NOT NULL,
+  calificable BOOLEAN NOT NULL DEFAULT FALSE,
+  rutaPdf VARCHAR(500),
+  estado VARCHAR(20) NOT NULL DEFAULT 'activa',
+  idGrupo INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fkActividadGrupo
+    FOREIGN KEY (idGrupo) REFERENCES Grupos(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Asistencias (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  asistio BOOLEAN NOT NULL,
+  calificacion DECIMAL(2, 1),
+  observaciones VARCHAR(500),
+  idCatequizando INT NOT NULL,
+  idActividad INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fkAsistenciaCatequizando
+    FOREIGN KEY (idCatequizando) REFERENCES Catequizandos(id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fkAsistenciaActividad
+    FOREIGN KEY (idActividad) REFERENCES Actividades(id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT chkAsistenciasCalificacion
+    CHECK (calificacion IS NULL OR (calificacion >= 1.0 AND calificacion <= 5.0)),
+  CONSTRAINT uqAsistenciaCatequizandoActividad
+    UNIQUE (idCatequizando, idActividad)
+);

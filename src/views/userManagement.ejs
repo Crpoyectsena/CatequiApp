@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestión de cuentas de CatequiApp">
+  <title>Cuentas de usuario | CatequiApp</title>
+  <link rel="stylesheet" href="/styles/app.css">
+  <link rel="stylesheet" href="/styles/navigation.css">
+  <link rel="stylesheet" href="/styles/userManagement.css">
+  <script defer src="/js/userManagement.js"></script>
+</head>
+
+<body class="with-sidebar">
+  <%- include('partials/sidebar', { activeModule, userRole }) %>
+  <main class="accounts-content" data-current-user-id="<%= currentUserId %>">
+    <header class="accounts-topbar">
+      <div>
+        <p class="accounts-breadcrumb">CatequiApp <span aria-hidden="true">/</span> Administración</p>
+        <p class="accounts-caption">Cuentas y perfiles de acceso</p>
+      </div>
+      <span class="administrator-badge">Administrador</span>
+    </header>
+
+    <section class="accounts-hero">
+      <p class="accounts-kicker">ACCESO A LA COMUNIDAD</p>
+      <h1>Cuentas de usuario</h1>
+      <p>Administra quién puede acceder a CatequiApp y asigna el perfil adecuado para su labor.</p>
+    </section>
+
+    <section class="accounts-panel" aria-labelledby="accounts-title">
+      <div class="accounts-panel-heading">
+        <div>
+          <p class="accounts-kicker">USUARIOS REGISTRADOS</p>
+          <h2 id="accounts-title">Directorio de cuentas</h2>
+        </div>
+        <button class="accounts-primary-button" type="button" id="create-account">＋ Crear cuenta</button>
+      </div>
+
+      <p class="accounts-feedback" id="accounts-feedback" role="status" aria-live="polite"></p>
+
+      <div class="accounts-table-wrapper">
+        <table class="accounts-table" id="accounts-table">
+          <thead>
+            <tr>
+              <th scope="col">Documento</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Rol</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(function (user) { %>
+              <tr>
+                <td><%= user.id %></td>
+                <td><%= [user.firstName, user.middleName, user.firstLastName, user.secondLastName].filter(Boolean).join(' ') %></td>
+                <td><%= user.userName %></td>
+                <td><%= user.email %></td>
+                <td><%= user.phone || '—' %></td>
+                <td><span class="role-badge"><%= user.role %></span></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <p class="accounts-empty" id="accounts-empty" <%= users.length ? 'hidden' : '' %>>Aún no hay cuentas registradas.</p>
+      </div>
+    </section>
+
+    <p class="accounts-guidance">Los roles disponibles son Administrador, Catequista, Acudiente y Catequizando. Solo una cuenta administradora puede administrar cuentas.</p>
+
+    <footer class="accounts-footer">
+      <span>© <%= new Date().getFullYear() %> CatequiApp</span>
+      <span>Creciendo juntos en la fe</span>
+    </footer>
+  </main>
+
+  <div class="account-modal" id="account-modal" hidden>
+    <section class="account-modal-card" role="dialog" aria-modal="true" aria-labelledby="account-modal-title">
+      <div class="account-modal-heading">
+        <div>
+          <p class="accounts-kicker">NUEVO ACCESO</p>
+          <h2 id="account-modal-title">Crear cuenta</h2>
+        </div>
+        <button class="account-close" type="button" id="close-account-modal" aria-label="Cerrar formulario">×</button>
+      </div>
+
+      <form class="account-form" id="account-form">
+        <label for="document" id="document-label">Documento de identidad</label>
+        <input type="number" id="document" min="1" step="1" required>
+
+        <label for="document-type" id="document-type-label">Tipo de documento</label>
+        <select id="document-type" required>
+          <option value="CC">Cédula de ciudadanía</option>
+          <option value="TI">Tarjeta de identidad</option>
+          <option value="CE">Cédula de extranjería</option>
+          <option value="PA">Pasaporte</option>
+        </select>
+
+        <label for="names">Nombres</label>
+        <input type="text" id="names" maxlength="50" required>
+
+        <label for="surnames">Apellidos</label>
+        <input type="text" id="surnames" maxlength="50" required>
+
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" maxlength="100" required>
+
+        <label for="phone">Teléfono</label>
+        <input type="tel" id="phone" maxlength="20" required>
+
+        <label for="userName">Nombre de usuario</label>
+        <input type="text" id="userName" maxlength="50" required>
+
+        <label for="password" id="password-label">Contraseña inicial</label>
+        <input type="password" id="password" minlength="8" autocomplete="new-password">
+        <small class="account-password-note" id="password-note">Si la dejas vacía, se usará el documento de identidad.</small>
+
+        <label for="role">Perfil de acceso</label>
+        <select id="role" required>
+          <option value="">Selecciona un perfil</option>
+          <option value="administrador">Administrador</option>
+          <option value="catequista">Catequista</option>
+          <option value="acudiente">Acudiente</option>
+          <option value="catequizando">Catequizando</option>
+        </select>
+
+        <div class="catechumen-account-fields" id="catechumen-account-fields" hidden>
+          <label for="catechumen-birth-date">Fecha de nacimiento</label>
+          <input type="date" id="catechumen-birth-date">
+
+          <label for="catechumen-guardian">Acudiente responsable</label>
+          <select id="catechumen-guardian">
+            <option value="">Selecciona un acudiente registrado</option>
+            <% guardianOptions.forEach(function (guardian) { %>
+              <option value="<%= guardian.id %>"><%= guardian.label %></option>
+            <% }); %>
+          </select>
+          <p class="catechumen-account-note" id="catechumen-account-note">
+            <%= guardianOptions.length ? 'El catequizando debe quedar vinculado a un acudiente.' : 'Primero registra un acudiente en el módulo Acudientes.' %>
+          </p>
+        </div>
+
+        <label for="address">Dirección</label>
+        <input type="text" id="address" maxlength="255">
+
+        <label for="registration-number">Código de registro</label>
+        <input type="text" id="registration-number" maxlength="50">
+
+        <label for="program">Programa</label>
+        <input type="text" id="program" maxlength="100">
+
+        <p class="account-form-feedback" id="account-form-feedback" role="alert"></p>
+        <div class="account-form-actions">
+          <button class="accounts-secondary-button" type="button" id="cancel-account">Cancelar</button>
+          <button class="accounts-primary-button" type="submit" id="save-account">Crear cuenta</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</body>
+
+</html>

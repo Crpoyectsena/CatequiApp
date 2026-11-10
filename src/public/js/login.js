@@ -1,34 +1,73 @@
-async function handleSubmit(event) {
+const loginForm = document.getElementById('loginForm');
+const wrongInput = document.getElementById('wrong-input');
+const loginButton = document.getElementById('login-button');
+
+loginForm.addEventListener('submit', async (event) => {
+  if (event.defaultPrevented) {
+    return;
+  }
   event.preventDefault();
 
-  const userName = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  const wrongInput = document.getElementById('wrong-input');
+  const credentials = {
+    userName: document.getElementById('username').value.trim(),
+    password: document.getElementById('password').value,
+  };
 
-  const credentials = { userName, password };
+  wrongInput.textContent = '';
+  loginButton.disabled = true;
+  loginButton.textContent = 'Ingresando...';
 
   try {
     const response = await fetch('/app/v1/users/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ credentials })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credentials }),
     });
 
-    if (response.status === 200) {
-      window.location.href = '/app/v1/dashboard';
-    } else if (response.status === 404 || response.status === 401) {
-      const html = await response.text();
-      document.body.innerHTML = html;
-
-      const acceptButton = document.querySelector('.button');
-      acceptButton.addEventListener('click', function () {
-        window.location.href = '/app/v1/';
-      });
+    if (response.ok) {
+      window.location.assign('/app/v1/dashboard');
+      return;
     }
-  } catch (error) {
-    wrongInput.textContent = 'Error de conexión con el servidor';
+
+    if (response.status === 404) {
+      wrongInput.textContent = 'No encontramos ese usuario. Verifica los datos e inténtalo de nuevo.';
+    } else if (response.status === 401) {
+      wrongInput.textContent = 'La contraseña no es correcta. Verifícala e inténtalo de nuevo.';
+    } else {
+      wrongInput.textContent = 'No fue posible iniciar sesión. Inténtalo de nuevo más tarde.';
+    }
     wrongInput.style.display = 'block';
+  } catch {
+    wrongInput.textContent = 'No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.';
+    wrongInput.style.display = 'block';
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = 'Entrar a mi cuenta';
   }
-}
+});
+
+const recoveryModal = document.getElementById('recovery-modal');
+const closeRecoveryModal = () => {
+  recoveryModal.hidden = true;
+  document.getElementById('forgot-password').focus();
+};
+
+document.getElementById('forgot-password').addEventListener('click', () => {
+  recoveryModal.hidden = false;
+  document.getElementById('confirm-recovery').focus();
+});
+
+document.getElementById('close-recovery').addEventListener('click', closeRecoveryModal);
+document.getElementById('confirm-recovery').addEventListener('click', closeRecoveryModal);
+
+recoveryModal.addEventListener('click', (event) => {
+  if (event.target === recoveryModal) {
+    closeRecoveryModal();
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !recoveryModal.hidden) {
+    closeRecoveryModal();
+  }
+});

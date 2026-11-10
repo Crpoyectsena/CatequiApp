@@ -7,11 +7,14 @@ import Boom from '@hapi/boom';
 export const deleteOneUser = async (req, res, next) => {
 
   // Extract the user ID from the request body
-  const { id } = req.body;
+  const { id } = req.body || {};
 
   // Validate if the user ID is sent.
   if (!id) {
     return next(Boom.badRequest('User ID is required for deletion'));
+  }
+  if (String(id) === String(req.user.id)) {
+    return next(Boom.forbidden('You cannot delete your own account'));
   }
 
   // Instantiate the UserServices class to manage the user operations

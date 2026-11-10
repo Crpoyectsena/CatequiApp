@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestión de catequistas">
+  <title>Catequistas | CatequiApp</title>
+  <link rel="stylesheet" href="/styles/app.css">
+  <link rel="stylesheet" href="/styles/catechists.css" type="text/css">
+  <link rel="stylesheet" href="/styles/navigation.css">
+  <script type="application/javascript" src="/js/redirectView.js"></script>
+  <script defer type="application/javascript" src="/js/catechists.js"></script>
+</head>
+
+<body class="with-sidebar">
+  <%- include('partials/sidebar', { activeModule: 'catechists', userRole }) %>
+  <main class="management-container">
+    <nav class="top-nav">
+      <button class="back-button" data-path="/app/v1/dashboard" onclick="redirect(this)">
+        ← Volver al Dashboard
+      </button>
+      <% if (String(userRole).trim().toLowerCase() === 'administrador') { %>
+        <button class="add-button" onclick="openForm()">+ Nuevo catequista</button>
+      <% } %>
+    </nav>
+
+    <section class="card">
+      <h1 class="section-title">Catequistas</h1>
+      <p class="form-error" id="wrong-input"></p>
+
+      <div class="table-wrapper">
+        <table class="data-table" id="catechists-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Documento</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Teléfono</th>
+              <th>Correo</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% catechists.forEach(function (c) { %>
+              <tr>
+                <td><%= c.id %></td>
+                <td><%= c.tipoDocumento %> <%= c.numeroDocumento %></td>
+                <td><%= c.nombres %></td>
+                <td><%= c.apellidos %></td>
+                <td><%= c.telefono %></td>
+                <td><%= c.correo %></td>
+                <td><%= c.estado %></td>
+                <td class="actions-cell">
+                  <button class="action-button primary"
+                    data-action="edit" data-catechist-id="<%= c.id %>">Editar</button>
+                  <button class="action-button danger"
+                    data-action="delete" data-catechist-id="<%= c.id %>">Eliminar</button>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Modal for creating and updating catechists -->
+    <div class="modal-overlay" id="modal-overlay">
+      <section class="modal-card">
+        <h2 class="modal-title" id="modal-title">Nuevo catequista</h2>
+        <form class="form" id="catechist-form" onsubmit="return handleSubmit(event)">
+          <input type="hidden" id="id">
+          <input type="text" placeholder="Tipo de documento" id="tipoDocumento" required>
+          <input type="number" placeholder="Número de documento" id="numeroDocumento" min="1" step="1" required>
+          <input type="text" placeholder="Nombres" id="nombres" required>
+          <input type="text" placeholder="Apellidos" id="apellidos" required>
+          <input type="tel" placeholder="Teléfono" id="telefono">
+          <input type="email" placeholder="Correo" id="correo">
+          <input type="text" placeholder="Dirección" id="direccion">
+          <input type="text" placeholder="Nombre de usuario" id="account-user-name" required>
+          <input type="password" placeholder="Contraseña inicial (mínimo 8 caracteres)" id="account-password" minlength="8" required>
+          <select id="estado" required>
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+          <p class="form-error" id="form-error"></p>
+          <div class="modal-actions">
+            <button type="button" class="action-button warning" onclick="closeForm()">Cancelar</button>
+            <button type="submit" class="action-button primary">Guardar</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>

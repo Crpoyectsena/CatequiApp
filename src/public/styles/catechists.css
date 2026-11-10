@@ -1,0 +1,228 @@
+body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3.2rem 2rem;
+}
+
+.management-container {
+  display: flex;
+  width: min(100%, 120rem);
+  flex-direction: column;
+  gap: 1.8rem;
+  padding: clamp(1.6rem, 4vw, 3.6rem);
+  border: 0.1rem solid rgba(255, 255, 255, 0.72);
+  border-radius: 2.8rem;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: var(--shadow);
+  animation: fadeIn 500ms ease both;
+}
+
+.top-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.back-button,
+.add-button {
+  min-height: 4.6rem;
+  padding: 1rem 1.6rem;
+  box-shadow: 0 0.6rem 1.8rem rgba(30, 66, 57, 0.08);
+  font-size: 1.4rem;
+}
+
+.back-button {
+  color: var(--brand);
+  background: var(--surface);
+}
+
+.back-button:hover {
+  color: #fff;
+  background: var(--brand);
+}
+
+.add-button {
+  color: #fff;
+  background: var(--brand);
+}
+
+.add-button:hover {
+  background: var(--brand-dark);
+}
+
+.card {
+  padding: clamp(1.8rem, 4vw, 3rem);
+  overflow: hidden;
+  border-radius: 2rem;
+}
+
+.section-title {
+  margin-bottom: 2rem;
+  color: var(--ink);
+  font-size: 2.8rem;
+  letter-spacing: -0.06rem;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 0.1rem solid var(--line);
+  border-radius: 1.4rem;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 88rem;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 1.4rem 1.5rem;
+  border-bottom: 0.1rem solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.data-table th {
+  color: var(--brand-dark);
+  background: #edf5f1;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table tbody tr:hover {
+  background: #f7faf8;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.action-button {
+  min-height: 3.6rem;
+  padding: 0.7rem 1.1rem;
+  color: #fff;
+  background: var(--brand);
+  font-size: 1.3rem;
+}
+
+.action-button:hover {
+  filter: brightness(0.94);
+}
+
+.warning {
+  color: #4a3610;
+  background: #f3d795;
+}
+
+.danger {
+  background: var(--danger);
+}
+
+.form-error {
+  display: none;
+  margin-top: 1rem;
+  color: var(--danger);
+  font-size: 1.3rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(16, 43, 38, 0.58);
+  backdrop-filter: blur(0.5rem);
+  inset: 0;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-card {
+  width: min(100%, 48rem);
+  max-height: min(90vh, 78rem);
+  padding: 3rem;
+  overflow-y: auto;
+  border: 0.1rem solid var(--line);
+  border-radius: 2rem;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  animation: fadeIn 180ms ease both;
+}
+
+.modal-title {
+  margin-bottom: 2rem;
+  color: var(--ink);
+  font-size: 2.4rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form input,
+.form select {
+  width: 100%;
+  min-height: 4.6rem;
+  padding: 0 1.3rem;
+  border: 0.1rem solid var(--line);
+  border-radius: 1.1rem;
+  background: #fbfcfb;
+  color: var(--ink);
+  font-size: 1.4rem;
+}
+
+.form input:focus,
+.form select:focus {
+  border-color: var(--brand);
+  outline: 0.3rem solid rgba(23, 107, 91, 0.12);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 1.4rem 1rem;
+  }
+
+  .top-nav {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .back-button,
+  .add-button {
+    justify-content: center;
+  }
+
+  .modal-card {
+    padding: 2rem;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+}

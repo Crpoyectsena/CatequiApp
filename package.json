@@ -20,6 +20,7 @@
   "main": "src/app.js",
   "scripts": {
     "dev": "nodemon src/app.js",
+    "bootstrap:admin": "node scripts/bootstrapAdmin.js",
     "dev-dep": "npm install && npm install nodemon morgan eslint eslint-config-prettier eslint-plugin-prettier prettier --save-dev -D",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -38,9 +39,9 @@
   "devDependencies": {
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^9.1.2",
-    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-prettier": "^5.5.7",
     "morgan": "^1.12.1",
     "nodemon": "^3.1.14",
-    "prettier": "^3.9.9"
+    "prettier": "^3.9.10"
   }
 }

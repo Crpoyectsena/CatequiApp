@@ -1,0 +1,131 @@
+:root {
+  color-scheme: light;
+  --brand: #176b5b;
+  --brand-dark: #104c43;
+  --brand-soft: #e7f3ef;
+  --accent: #d7a64a;
+  --ink: #223b38;
+  --muted: #71817d;
+  --line: #e3ebe7;
+  --surface: #ffffff;
+  --page: #f4f7f4;
+  --danger: #b94a48;
+  --shadow: 0 1.8rem 4.8rem rgba(30, 66, 57, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 32rem;
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 32rem;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(215, 166, 74, 0.13), transparent 34rem),
+    radial-gradient(ellipse at 100% 100%, rgba(23, 107, 91, 0.1), transparent 42rem),
+    var(--page);
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[data-path]:focus-visible {
+  outline: 0.3rem solid rgba(215, 166, 74, 0.75);
+  outline-offset: 0.3rem;
+}
+
+.brand-mark {
+  display: inline-grid;
+  width: 5.2rem;
+  height: 5.2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0.1rem solid rgba(255, 255, 255, 0.36);
+  border-radius: 1.7rem;
+  color: #fff;
+  background: linear-gradient(145deg, #25816d, var(--brand-dark));
+  box-shadow: 0 0.8rem 1.8rem rgba(16, 76, 67, 0.2);
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.1rem;
+}
+
+.brand-mark.auth-logo {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 2.2rem;
+  font-size: 3.8rem;
+}
+
+.card,
+.auth-card {
+  border: 0.1rem solid rgba(227, 235, 231, 0.9);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.back-button,
+.add-button,
+.action-button,
+.form-button,
+.form button,
+.button {
+  border: 0;
+  border-radius: 1.2rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.back-button:hover,
+.add-button:hover,
+.action-button:hover,
+.form-button:hover,
+.form button:hover,
+.button:hover {
+  transform: translateY(-0.2rem);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

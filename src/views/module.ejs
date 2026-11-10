@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="<%= module.title %> | CatequiApp">
+  <title><%= module.title %> | CatequiApp</title>
+  <link rel="stylesheet" href="/styles/app.css">
+  <link rel="stylesheet" href="/styles/navigation.css">
+  <link rel="stylesheet" href="/styles/module.css">
+  <script defer src="/js/moduleRecords.js"></script>
+</head>
+
+<body class="with-sidebar" data-module="<%= activeModule %>">
+  <%- include('partials/sidebar', { activeModule, userRole }) %>
+
+  <main class="module-content">
+    <header class="module-topbar">
+      <div>
+        <p class="module-breadcrumb">CatequiApp <span aria-hidden="true">/</span> <%= module.category %></p>
+        <p class="module-topbar-caption">Administración del programa de catequesis</p>
+      </div>
+      <a class="module-user" href="/app/v1/profile">Mi perfil <span aria-hidden="true">→</span></a>
+    </header>
+
+    <section class="module-hero">
+      <div class="module-hero-icon" aria-hidden="true">
+        <% if (activeModule === 'guardians') { %>⌂<% } %>
+        <% if (activeModule === 'catechumens') { %>♡<% } %>
+        <% if (activeModule === 'groups') { %>◉<% } %>
+        <% if (activeModule === 'enrollments') { %>▣<% } %>
+        <% if (activeModule === 'activities') { %>◷<% } %>
+        <% if (activeModule === 'attendance') { %>✓<% } %>
+      </div>
+      <p class="module-kicker"><%= module.category %></p>
+      <h1><%= module.title %></h1>
+      <p class="module-description"><%= module.description %></p>
+    </section>
+
+    <% if (permissions.canUseAttendanceGrid) { %>
+      <section class="attendance-grid-panel" aria-labelledby="attendance-grid-title">
+        <div class="attendance-grid-heading">
+          <div>
+            <p class="module-kicker">SEGUIMIENTO POR GRUPO</p>
+            <h2 id="attendance-grid-title">Asistencia y calificaciones</h2>
+            <p>Selecciona un grupo para consultar a sus estudiantes y actividades.</p>
+          </div>
+          <label class="record-field attendance-group-filter" for="attendance-group">
+            <span>Grupo</span>
+            <select id="attendance-group">
+              <option value="">Selecciona un grupo</option>
+              <% (options.idGrupo || []).forEach(function (group) { %>
+                <option value="<%= group.id %>"><%= group.label %></option>
+              <% }); %>
+            </select>
+          </label>
+        </div>
+        <p class="module-feedback" id="attendance-grid-feedback" role="status" aria-live="polite"></p>
+        <div class="attendance-grid-table-wrapper" id="attendance-grid-table-wrapper">
+          <p class="attendance-grid-placeholder" id="attendance-grid-placeholder">
+            Selecciona un grupo para ver la cuadrícula de estudiantes y actividades.
+          </p>
+        </div>
+        <div class="attendance-grid-actions">
+          <p>Las calificaciones admiten valores entre 1.0 y 5.0.</p>
+          <button class="module-primary-button" type="button" id="save-attendance-grid" disabled>Guardar cambios</button>
+        </div>
+      </section>
+    <% } %>
+
+    <section class="records-panel" aria-labelledby="records-title">
+      <div class="records-heading">
+        <div>
+          <p class="module-kicker">GESTIÓN DE REGISTROS</p>
+          <h2 id="records-title"><%= permissions.canCreate || permissions.canEdit ? 'Registros de ' : 'Consulta de ' %><%= module.title.toLowerCase() %></h2>
+        </div>
+        <% if (permissions.canCreate) { %>
+          <button class="module-primary-button" type="button" id="create-record">＋ Nuevo registro</button>
+        <% } %>
+      </div>
+
+      <div class="records-toolbar">
+        <label class="records-search-label" for="record-search">Buscar en los registros</label>
+        <input id="record-search" class="records-search" type="search" placeholder="Escribe para filtrar...">
+      </div>
+
+      <p class="module-feedback" id="module-feedback" role="status" aria-live="polite"></p>
+
+      <div class="records-table-wrapper">
+        <table class="records-table" id="records-table">
+          <thead>
+            <tr>
+              <% module.columns.forEach(function (column) { %>
+                <th scope="col"><%= column.label %></th>
+              <% }); %>
+              <% if (permissions.canEdit || permissions.canDelete) { %>
+                <th scope="col">Acciones</th>
+              <% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <% records.forEach(function (record) { %>
+              <tr>
+                <% module.columns.forEach(function (column) { %>
+                  <td>
+                    <% if (record[column.key] == null || record[column.key] === '') { %>
+                      —
+                    <% } else if (column.type === 'boolean') { %>
+                      <%= record[column.key] === true || record[column.key] === 1 || record[column.key] === '1' ? 'Sí' : 'No' %>
+                    <% } else if (column.type === 'link') { %>
+                      <% if (/^(https?:\/\/|\/)/i.test(record[column.key])) { %>
+                        <a href="<%= record[column.key] %>" target="_blank" rel="noopener noreferrer">Abrir material</a>
+                      <% } else { %>
+                        —
+                      <% } %>
+                    <% } else { %>
+                      <%= record[column.key] %>
+                      <% if (column.secondaryKey && record[column.secondaryKey]) { %>
+                        <%= record[column.secondaryKey] %>
+                      <% } %>
+                    <% } %>
+                  </td>
+                <% }); %>
+                <% if (permissions.canEdit || permissions.canDelete) { %>
+                  <td class="record-actions">
+                    <% if (permissions.canEdit) { %>
+                      <button class="record-action edit-record" type="button" data-record-id="<%= record.id %>">Editar</button>
+                    <% } %>
+                    <% if (permissions.canDelete) { %>
+                      <button class="record-action delete-record" type="button" data-record-id="<%= record.id %>">Eliminar</button>
+                    <% } %>
+                  </td>
+                <% } %>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <p class="empty-records" id="empty-records" <%= records.length ? 'hidden' : '' %>>
+          <%= permissions.canCreate ? 'Aún no hay registros. Usa «Nuevo registro» para agregar el primero.' : 'No hay registros disponibles para mostrar.' %>
+        </p>
+      </div>
+    </section>
+
+    <section class="module-relation-note">
+      <span aria-hidden="true">↳</span>
+      <p><%= module.relation %></p>
+    </section>
+
+    <footer class="module-footer">
+      <span>© <%= new Date().getFullYear() %> CatequiApp</span>
+      <span>Creciendo juntos en la fe</span>
+    </footer>
+  </main>
+
+  <% if (permissions.canCreate || permissions.canEdit) { %>
+  <div class="record-modal" id="record-modal" hidden>
+    <section class="record-modal-card" role="dialog" aria-modal="true" aria-labelledby="record-modal-title">
+      <div class="record-modal-heading">
+        <div>
+          <p class="module-kicker"><%= module.title %></p>
+          <h2 id="record-modal-title">Nuevo registro</h2>
+        </div>
+        <button class="modal-close" type="button" id="close-record-modal" aria-label="Cerrar formulario">×</button>
+      </div>
+      <form class="record-form" id="record-form">
+        <input type="hidden" id="record-id">
+        <div class="record-fields">
+          <% module.fields.forEach(function (field) { %>
+            <% if (field.type === 'checkbox') { %>
+              <label class="checkbox-field">
+                <input type="checkbox" id="field-<%= field.key %>" <%= field.defaultValue ? 'checked' : '' %>>
+                <span><%= field.label %></span>
+              </label>
+            <% } else if (field.type === 'select') { %>
+              <label class="record-field" for="field-<%= field.key %>">
+                <span><%= field.label %><%= field.required ? ' *' : '' %></span>
+                <select id="field-<%= field.key %>" <%= field.required ? 'required' : '' %>>
+                  <% field.options.forEach(function (option) { %>
+                    <option value="<%= option %>" <%= field.defaultValue === option ? 'selected' : '' %>><%= option %></option>
+                  <% }); %>
+                </select>
+              </label>
+            <% } else if (field.type === 'reference') { %>
+              <label class="record-field" for="field-<%= field.key %>">
+                <span><%= field.label %><%= field.required ? ' *' : '' %></span>
+                <select id="field-<%= field.key %>" <%= field.required ? 'required' : '' %>>
+                  <option value=""><%= field.optional ? 'Sin asignar' : 'Selecciona una opción' %></option>
+                  <% (options[field.key] || []).forEach(function (option) { %>
+                    <option value="<%= option.id %>"><%= option.label %></option>
+                  <% }); %>
+                </select>
+              </label>
+            <% } else if (field.type === 'file') { %>
+              <label class="record-field" for="field-<%= field.key %>">
+                <span><%= field.label %></span>
+                <input
+                  type="file"
+                  id="field-<%= field.key %>"
+                  accept="<%= field.accept %>"
+                >
+                <small class="material-upload-note">Máximo 20 MB. El material solo queda disponible para usuarios autorizados.</small>
+              </label>
+            <% } else if (field.type === 'textarea') { %>
+              <label class="record-field record-field-wide" for="field-<%= field.key %>">
+                <span><%= field.label %><%= field.required ? ' *' : '' %></span>
+                <textarea id="field-<%= field.key %>" rows="3" <%= field.required ? 'required' : '' %>></textarea>
+              </label>
+            <% } else { %>
+              <label class="record-field" for="field-<%= field.key %>">
+                <span><%= field.label %><%= field.required ? ' *' : '' %></span>
+                <input
+                  type="<%= field.type || 'text' %>"
+                  id="field-<%= field.key %>"
+                  <%= field.required ? 'required' : '' %>
+                  <%= field.min !== undefined ? `min="${field.min}"` : '' %>
+                  <%= field.max !== undefined ? `max="${field.max}"` : '' %>
+                  <%= field.step !== undefined ? `step="${field.step}"` : '' %>
+                >
+              </label>
+            <% } %>
+          <% }); %>
+        </div>
+        <% if (activeModule === 'catechumens') { %>
+          <div class="record-fields catechumen-access-fields" id="catechumen-access-fields">
+            <label class="record-field" for="catechumen-user-name">
+              <span>Nombre de usuario *</span>
+              <input type="text" id="catechumen-user-name" maxlength="50" required>
+            </label>
+            <label class="record-field" for="catechumen-password">
+              <span>Contraseña inicial *</span>
+              <input type="password" id="catechumen-password" minlength="8" required>
+            </label>
+          </div>
+        <% } %>
+        <% if (activeModule === 'guardians') { %>
+          <div class="record-fields guardian-access-fields" id="guardian-access-fields">
+            <label class="record-field" for="guardian-user-name">
+              <span>Nombre de usuario *</span>
+              <input type="text" id="guardian-user-name" maxlength="50" required>
+            </label>
+            <label class="record-field" for="guardian-password">
+              <span>Contraseña inicial *</span>
+              <input type="password" id="guardian-password" minlength="8" required>
+            </label>
+          </div>
+        <% } %>
+        <p class="form-feedback" id="form-feedback" role="alert"></p>
+        <div class="record-form-actions">
+          <button class="module-secondary-button" type="button" id="cancel-record">Cancelar</button>
+          <button class="module-primary-button" type="submit" id="save-record">Guardar registro</button>
+        </div>
+      </form>
+    </section>
+  </div>
+  <% } %>
+
+  <script type="application/json" id="module-config"><%- JSON.stringify({ fields: permissions.canCreate || permissions.canEdit ? module.fields : [], columns: module.columns, permissions }).replace(/</g, '\\u003c') %></script>
+  <script type="application/json" id="module-options"><%- JSON.stringify(options).replace(/</g, '\\u003c') %></script>
+</body>
+
+</html>

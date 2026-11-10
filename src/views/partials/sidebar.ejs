@@ -1,0 +1,95 @@
+<aside class="sidebar" aria-label="Navegación principal">
+  <% const navigationRole = String(userRole || '').trim().toLowerCase(); %>
+  <a class="brand-heading" href="/app/v1/dashboard" aria-label="CatequiApp, inicio">
+    <span class="brand-mark" aria-hidden="true">C</span>
+    <span class="brand-copy">
+      <span class="project-name">CatequiApp</span>
+      <span class="dashboard-caption">Gestión de catequesis</span>
+    </span>
+  </a>
+
+  <nav class="module-nav">
+    <p class="nav-label">GENERAL</p>
+    <a class="nav-item" href="/app/v1/dashboard" <%= activeModule === 'dashboard' ? 'aria-current="page"' : '' %>>
+      <span class="nav-icon" aria-hidden="true">⌂</span>
+      <span>Inicio</span>
+    </a>
+
+    <% if (navigationRole === 'administrador') { %>
+      <p class="nav-label">ACOMPAÑAMIENTO</p>
+      <a class="nav-item" href="/app/v1/catechists" <%= activeModule === 'catechists' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">✦</span>
+        <span>Catequistas</span>
+      </a>
+
+      <p class="nav-label">COMUNIDAD</p>
+      <a class="nav-item" href="/app/v1/modules/guardians" <%= activeModule === 'guardians' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span>Acudientes</span>
+      </a>
+      <a class="nav-item" href="/app/v1/modules/catechumens" <%= activeModule === 'catechumens' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">♡</span>
+        <span>Catequizandos</span>
+      </a>
+      <a class="nav-item" href="/app/v1/modules/groups" <%= activeModule === 'groups' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">◉</span>
+        <span>Grupos</span>
+      </a>
+
+      <p class="nav-label">PROCESO FORMATIVO</p>
+      <a class="nav-item" href="/app/v1/modules/enrollments" <%= activeModule === 'enrollments' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">▣</span>
+        <span>Matrículas</span>
+      </a>
+      <a class="nav-item" href="/app/v1/modules/activities" <%= activeModule === 'activities' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">◷</span>
+        <span>Actividades y material</span>
+      </a>
+      <a class="nav-item" href="/app/v1/modules/attendance" <%= activeModule === 'attendance' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">✓</span>
+        <span>Reportes</span>
+      </a>
+      <p class="nav-label">ADMINISTRACIÓN</p>
+      <a class="nav-item" href="/app/v1/users/manage" <%= activeModule === 'accounts' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">♙</span>
+        <span>Cuentas</span>
+      </a>
+    <% } else if (navigationRole === 'catequista') { %>
+      <p class="nav-label">MIS GRUPOS</p>
+      <a class="nav-item" href="/app/v1/modules/activities" <%= activeModule === 'activities' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">◷</span>
+        <span>Actividades y material</span>
+      </a>
+      <a class="nav-item" href="/app/v1/modules/attendance" <%= activeModule === 'attendance' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">✓</span>
+        <span>Asistencia y notas</span>
+      </a>
+    <% } else if (['acudiente', 'catequizando'].includes(navigationRole)) { %>
+      <p class="nav-label">MI SEGUIMIENTO</p>
+      <a class="nav-item" href="/app/v1/modules/catechumens" <%= activeModule === 'catechumens' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">♡</span>
+        <span>Ficha y proceso</span>
+      </a>
+      <a class="nav-item" href="/app/v1/modules/activities" <%= activeModule === 'activities' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">◷</span>
+        <span>Material de apoyo</span>
+      </a>
+      <a class="nav-item" href="/app/v1/modules/attendance" <%= activeModule === 'attendance' ? 'aria-current="page"' : '' %>>
+        <span class="nav-icon" aria-hidden="true">✓</span>
+        <span>Seguimiento académico</span>
+      </a>
+    <% } %>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <a class="nav-item" href="/app/v1/profile" <%= activeModule === 'profile' ? 'aria-current="page"' : '' %>>
+      <span class="nav-icon" aria-hidden="true">●</span>
+      <span>Mi perfil</span>
+    </a>
+    <a class="nav-item signout-link" href="/app/v1/">
+      <span class="nav-icon" aria-hidden="true">↪</span>
+      <span>Cerrar sesión</span>
+    </a>
+    <p class="sidebar-footer">Creciendo juntos en la fe</p>
+  </div>
+</aside>

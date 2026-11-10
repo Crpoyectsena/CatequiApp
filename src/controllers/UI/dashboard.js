@@ -12,7 +12,11 @@ export const dashboard = async (req, res, next) => {
     // Find the user record by ID
     const userData = await userManager.listOne(id);
     // Return rendering the template and send the username
-    res.render('dashboard', { userName: userData.userName });
+    res.render('dashboard', {
+      userName: userData.userName,
+      activeModule: 'dashboard',
+      userRole: userData.role,
+    });
   } catch (err) {
     const boomError = Boom.notImplemented(
       'No es posible renderizar la vista de dashboard principal.',

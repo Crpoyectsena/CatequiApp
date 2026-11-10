@@ -4,22 +4,27 @@ import { Router } from 'express';
 import { UIRouter } from './UIRouter.js';
 // Import the userRouter for handling user-related routes
 import { userRouter } from './userRouter.js';
+// Import the catechistRouter for handling catechist-related routes
+import { catechistRouter } from './catechistRouter.js';
+// Import the moduleRouter for catechesis data operations
+import { moduleRouter } from './moduleRouter.js';
 
-// Function to set up API routes
+// Set up the application routes
 const routerApi = (app) => {
+	// Create the router for versioned application routes
+	const router = Router();
 
-  // Create a new Router instance
-  const router = Router();
+	// Mount all application routes under the API version prefix
+	app.use('/app/v1', router);
+	// Register the user-interface routes
+	router.use('/', UIRouter);
+	// Register user API routes
+	router.use('/users', userRouter);
+	// Register catechist API routes
+	router.use('/catechists', catechistRouter);
+	// Register API routes for catechesis modules
+	router.use('/modules', moduleRouter);
+};
 
-  // Use the router instance for the '/app/v1' path
-  app.use('/app/v1', router);
-
-  // Use the UIRouter for handling the root '/' route under '/app/v1/'
-  router.use('/', UIRouter);
-
-  // Use the userRouter for handling '/users' routes under '/app/v1'
-  router.use('/users', userRouter);
-}
-
-// Export the routerApi function for use in other parts of the application
+// Export the route setup function for the application bootstrap
 export default routerApi;

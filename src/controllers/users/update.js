@@ -6,10 +6,15 @@ import Boom from '@hapi/boom';
 export const updateOneUser = async (req, res, next) => {
 
   // Extract user ID and new user data from the request body
-  const { id, newUserData } = req.body;
+  const { id, newUserData } = req.body || {};
 
   // Validate if the user ID and new data object is sent.
-  if (!id || !newUserData) {
+  if (
+    !id ||
+    !newUserData ||
+    typeof newUserData !== 'object' ||
+    Array.isArray(newUserData)
+  ) {
     return next(Boom.badRequest('User ID and new user data are required'));
   }
 
@@ -25,6 +30,7 @@ export const updateOneUser = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: 'User updated successfully',
+        passwordUpdated: response.passwordUpdated,
         // Include the new token in the response
         authentication: res.locals.newUserToken
       });
@@ -37,7 +43,7 @@ export const updateOneUser = async (req, res, next) => {
 
   } catch (err) {
     if (Boom.isBoom(err)) {
-      return next(err)
+      return next(err);
     }
     // Handle errors during the update process by returning a 503 error
     const boomError = Boom.serverUnavailable(

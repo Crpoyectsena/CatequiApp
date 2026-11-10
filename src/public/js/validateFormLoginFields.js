@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+const initializeLoginValidation = () => {
   const usernameField = document.getElementById('username');
   const passwordField = document.getElementById('password');
   const wrongInput = document.getElementById('wrong-input');
@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const blackShadow = '0px 5px 5px rgba(0, 0, 0, 0.6)';
 
   function validateUsernameField() {
-    const usernameRegEx = /^[a-zA-Z0-9._-]{3,20}$/;
-    const isValid = usernameRegEx.test(usernameField.value);
+    const isValid = usernameField.value.trim().length > 0 &&
+      usernameField.value.length <= 50;
 
     if (!isValid) {
       usernameField.style.boxShadow = redShadow;
-      showError("El usuario debe tener entre 3 y 20 caracteres.");
+      showError('Escribe un nombre de usuario válido (máximo 50 caracteres).');
       return false;
     } else {
       clearError(usernameField);
@@ -28,12 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function validatePasswordField() {
-    const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,30}$/;
-    const isValid = passwordRegEx.test(passwordField.value);
+    const isValid = passwordField.value.length > 0 && passwordField.value.length <= 72;
 
     if (!isValid) {
       passwordField.style.boxShadow = redShadow;
-      showError("La contraseña debe tener entre 5 y 30 caracteres e incluir al menos un número.");
+      showError('La contraseña debe tener entre 1 y 72 caracteres.');
       return false;
     } else {
       clearError(passwordField);
@@ -58,7 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isUsernameValid || !isPasswordValid) {
       event.preventDefault();
-      showError("Por favor, corrija los errores antes de continuar.");
+      showError('Por favor, corrige los datos antes de continuar.');
     }
   });
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeLoginValidation, { once: true });
+} else {
+  initializeLoginValidation();
+}

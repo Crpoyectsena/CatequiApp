@@ -9,13 +9,18 @@ import { config } from '../../config/config.js';
 
 export const loginUser = async (req, res, next) => {
 
-  // Extract username and password from the request body
-  const { userName, password } = req.body.credentials;
+  // Extract credentials only when the request body contains a valid object
+  const credentials = req.body?.credentials;
+  if (!credentials || typeof credentials !== 'object' || Array.isArray(credentials)) {
+    return next(Boom.badRequest('Username and password are required'));
+  }
+  const { userName, password } = credentials;
 
   // Validate if the username and password is sent.
-  if (!userName || !password) {
-  return next(Boom.badRequest('Username and password are required'));
-}
+  if (typeof userName !== 'string' || !userName.trim() ||
+      typeof password !== 'string' || !password) {
+    return next(Boom.badRequest('Username and password are required'));
+  }
 
   // Instantiate the UserServices class to manage user operations
   const userManager = new UserServices();
@@ -43,8 +48,12 @@ export const loginUser = async (req, res, next) => {
         const decoded = jwt.verify(response.token, config.authAppJwtKey);
         // Get username from DB using the ID in the token
         const userRecord = await userManager.listOne(decoded.id);
-        // Finally render the dashboard view with the username data
-        return res.status(200).render("dashboard", { userName: userRecord.userName} );
+        // Render the dashboard with the account details required by the shared navigation
+        return res.status(200).render('dashboard', {
+          userName: userRecord.userName,
+          activeModule: 'dashboard',
+          userRole: userRecord.role,
+        });
       default:
         // Handle any unexpected cases with a 500 error
         return next(Boom.badImplementation('Servicio no disponible'));

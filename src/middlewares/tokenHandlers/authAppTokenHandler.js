@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 export const authAppVerifyToken = (req, res, next) => {
 
-  const authenticationToken = req.cookies.authentication;
+  const authenticationToken = req.cookies?.authentication;
 
   let message = "";
 
@@ -31,9 +31,20 @@ export const authAppVerifyToken = (req, res, next) => {
       }
     }
 
+    if (
+      !decoded ||
+      typeof decoded !== 'object' ||
+      !Number.isSafeInteger(Number(decoded.id)) ||
+      Number(decoded.id) < 1
+    ) {
+      res.clearCookie('authentication');
+      message = "Acceso denegado. Los datos del usuario no son validos, por favor inicie sesión e inténtelo de nuevo.";
+      return res.status(401).render("authError", { message: message, type: "token-inv" });
+    }
+
     // Extract user data from the decoded token
     const userData = {
-      id: decoded.id,
+      id: Number(decoded.id),
     };
 
     // Regenerate a new token for the user
@@ -43,7 +54,7 @@ export const authAppVerifyToken = (req, res, next) => {
     res.cookie('authentication', newUserToken, { httpOnly: true });
 
     // Attach user data to the request object for later use
-    req.user = decoded;
+    req.user = { ...decoded, id: Number(decoded.id) };
 
     // Proceed to the next middleware or controller
     next();

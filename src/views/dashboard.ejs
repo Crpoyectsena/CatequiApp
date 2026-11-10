@@ -4,66 +4,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Panel de usuario - Dashboard">
-  <title>Dashboard</title>
+  <meta name="description" content="Panel de CatequiApp">
+  <title>Inicio | CatequiApp</title>
   <meta name="robots" content="index,follow">
+  <link rel="stylesheet" href="/styles/app.css">
+  <link rel="stylesheet" href="/styles/navigation.css">
   <link rel="stylesheet" href="/styles/dashboard.css" type="text/css" />
-  <script type="application/javascript" src="/js/redirectView.js"></script>
 </head>
 
-<body>
-  <main class="container">
-    <section class="card project-info">
-      <h1 class="project-name">Sistema académico</h1>
-      <h2 class="welcome-title">Hola,
-        <span class="username">
-          <%= userName %>
-        </span>
-      </h2>
-      <picture class="logo-box">
-        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"
-          alt="JavaScript Logo" />
-      </picture>
+<body class="with-sidebar">
+  <% const dashboardRole = String(userRole || '').trim().toLowerCase(); %>
+  <%- include('partials/sidebar', { activeModule: 'dashboard', userRole }) %>
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="breadcrumb">CatequiApp <span aria-hidden="true">/</span> Inicio</p>
+        <p class="topbar-caption">Panel de acompañamiento</p>
+      </div>
+      <a class="profile-chip" href="/app/v1/profile">
+        <span class="profile-avatar" aria-hidden="true"><%= userName.charAt(0).toUpperCase() %></span>
+        <span class="profile-name"><%= userName %></span>
+        <span class="profile-chevron" aria-hidden="true">⌄</span>
+      </a>
+    </header>
+
+    <section class="welcome-panel">
+      <div class="welcome-content">
+        <p class="welcome-eyebrow">BIENVENIDO A TU ESPACIO</p>
+        <h1>¡Hola, <span class="username"><%= userName %></span>!</h1>
+        <% if (dashboardRole === 'administrador') { %>
+          <p class="welcome-copy">Organiza y acompaña cada etapa de la formación catequética desde un solo lugar.</p>
+          <a class="primary-action" href="/app/v1/catechists">
+            <span aria-hidden="true">＋</span> Gestionar catequistas
+          </a>
+        <% } else if (dashboardRole === 'catequista') { %>
+          <p class="welcome-copy">Gestiona las actividades, asistencia y calificaciones de tus grupos asignados.</p>
+          <a class="primary-action" href="/app/v1/modules/attendance">
+            <span aria-hidden="true">✓</span> Ver mis grupos
+          </a>
+        <% } else { %>
+          <p class="welcome-copy">Consulta el avance de tu proceso de formación y los materiales de apoyo.</p>
+          <a class="primary-action" href="/app/v1/modules/attendance">
+            <span aria-hidden="true">✓</span> Consultar seguimiento
+          </a>
+        <% } %>
+      </div>
+      <div class="welcome-decoration" aria-hidden="true">
+        <span class="decoration-cross">✦</span>
+        <span class="decoration-ring"></span>
+      </div>
     </section>
-    <section class="card dashboard">
-      <h2 class="dashboard-title">Servicios disponibles</h2>
 
-      <div class="dashboard-grid">
-        <div class="dashboard-card">
-          <h3 class="dashboard-card-title">Mis cursos</h3>
-          <p>Consulta y gestiona tus asignaturas actuales.</p>
-        </div>
-
-        <div class="dashboard-card">
-          <h3 class="dashboard-card-title">Calificaciones</h3>
-          <p>Visualiza tus resultados académicos por período.</p>
-        </div>
-
-        <div class="dashboard-card">
-          <h3 class="dashboard-card-title">Horarios</h3>
-          <p>Revisa tu calendario semanal de clases.</p>
-        </div>
-
-        <div class="dashboard-card">
-          <h3 class="dashboard-card-title">Biblioteca</h3>
-          <p>Accede a libros digitales y recursos de estudio.</p>
-        </div>
-
-        <div class="dashboard-card">
-          <h3 class="dashboard-card-title">Mensajes</h3>
-          <p>Comunícate con profesores y administrativos.</p>
-        </div>
-
-        <div class="dashboard-card" data-path="/app/v1/profile" onclick="redirect(this)">
-          <h3 class="dashboard-card-title">Perfil</h3>
-          <p>Actualiza tus datos personales y de contacto.</p>
+    <section class="program-section" aria-labelledby="program-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">EL PROCESO</p>
+          <h2 id="program-title">Un camino de formación</h2>
+          <p class="section-copy">Las etapas que organizan la comunidad y el acompañamiento catequético.</p>
         </div>
       </div>
 
-      <footer class="dashboard-footer">
-        <p>© 2025 Nombre del proyecto. Todos los derechos reservados.</p>
-      </footer>
+      <div class="journey-grid">
+        <% if (dashboardRole === 'administrador') { %>
+        <article class="journey-card">
+          <span class="journey-number">01</span>
+          <span class="journey-icon" aria-hidden="true">⌂</span>
+          <h3>Familias y comunidad</h3>
+          <p>Acudientes y catequizandos forman la comunidad que inicia el proceso.</p>
+          <div class="journey-actions">
+            <a class="journey-link" href="/app/v1/modules/guardians">Acudientes <span aria-hidden="true">→</span></a>
+            <a class="journey-link" href="/app/v1/modules/catechumens">Catequizandos <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+        <% } %>
+        <% if (dashboardRole === 'administrador') { %>
+        <article class="journey-card journey-card-active">
+          <span class="journey-number">02</span>
+          <span class="journey-icon" aria-hidden="true">✦</span>
+          <h3>Acompañamiento</h3>
+          <p>Los catequistas guían y acompañan a cada grupo en su formación.</p>
+          <div class="journey-actions">
+            <a class="journey-link" href="/app/v1/catechists">Catequistas <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+        <% } %>
+        <% if (dashboardRole === 'administrador') { %>
+        <article class="journey-card">
+          <span class="journey-number">03</span>
+          <span class="journey-icon" aria-hidden="true">◉</span>
+          <h3>Organización del proceso</h3>
+          <p>Grupos y matrículas organizan los niveles y la participación.</p>
+          <div class="journey-actions">
+            <a class="journey-link" href="/app/v1/modules/groups">Grupos <span aria-hidden="true">→</span></a>
+            <a class="journey-link" href="/app/v1/modules/enrollments">Matrículas <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+        <% } %>
+        <article class="journey-card">
+          <span class="journey-number">04</span>
+          <span class="journey-icon" aria-hidden="true">✓</span>
+          <h3>Seguimiento formativo</h3>
+          <p><%= dashboardRole === 'administrador' ? 'Consulta los reportes generales de asistencia y calificaciones.' : dashboardRole === 'catequista' ? 'Registra asistencia y calificaciones de tus grupos asignados.' : 'Consulta las actividades, asistencias y calificaciones de tu proceso.' %></p>
+          <div class="journey-actions">
+            <% if (dashboardRole === 'administrador') { %>
+              <a class="journey-link" href="/app/v1/modules/activities">Actividades <span aria-hidden="true">→</span></a>
+              <a class="journey-link" href="/app/v1/modules/attendance">Reportes <span aria-hidden="true">→</span></a>
+            <% } else if (dashboardRole === 'catequista') { %>
+              <a class="journey-link" href="/app/v1/modules/activities">Crear actividades <span aria-hidden="true">→</span></a>
+              <a class="journey-link" href="/app/v1/modules/attendance">Registrar asistencia <span aria-hidden="true">→</span></a>
+            <% } else { %>
+              <a class="journey-link" href="/app/v1/modules/catechumens">Ficha del catequizando <span aria-hidden="true">→</span></a>
+              <a class="journey-link" href="/app/v1/modules/activities">Material de apoyo <span aria-hidden="true">→</span></a>
+              <a class="journey-link" href="/app/v1/modules/attendance">Seguimiento académico <span aria-hidden="true">→</span></a>
+            <% } %>
+          </div>
+        </article>
+      </div>
     </section>
+
+    <footer class="dashboard-footer">
+      <span>© <%= new Date().getFullYear() %> CatequiApp</span>
+      <span>Creciendo juntos en la fe</span>
+    </footer>
   </main>
 </body>
 
